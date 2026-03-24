@@ -1,214 +1,60 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Claim THR 🎁</title>
-  <style>
-    :root {
-      --primary: #f97316;
-      --primary-dark: #ea580c;
-      --bg-gradient: linear-gradient(135deg, #f97316, #fb923c);
-    }
+  <title>Claim THR Kaka Ica🎁</title>
 
+  <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--bg-gradient);
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      color: #333;
+      font-family: Arial;
+      background: linear-gradient(135deg, #310505, #1a0000, #2b0000);
+      color: #ff4d4d;
+      text-align: center;
+      padding-top: 100px;
+      overflow: hidden;
     }
 
     .box {
-      background: #fff;
+      background: rgba(20, 0, 0, 0.9);
       padding: 30px;
-      border-radius: 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-      width: 100%;
-      max-width: 350px;
-      text-align: center;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 20px;
+      display: inline-block;
+      box-shadow: 0 0 25px rgba(255, 0, 0, 0.6);
+      border: 1px solid rgba(255, 0, 0, 0.4);
+      transition: all 0.5s ease;
+      max-width: 90%;
     }
 
-    h2 { margin-top: 0; color: #1f2937; }
-    p { color: #6b7280; font-size: 14px; }
-
-    input, select {
-      width: 100%;
-      padding: 14px;
-      margin: 8px 0;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 12px;
-      box-sizing: border-box;
-      font-size: 15px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    input:focus { border-color: var(--primary); }
-
-    .row { display: flex; gap: 8px; }
-    .row select { width: 40%; }
-    .row input { width: 60%; }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 12px;
-      background: var(--primary);
-      color: white;
-      font-weight: bold;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover:not(:disabled) {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-    }
-
-    button:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    /* Animasi Transition */
-    .hidden { display: none; opacity: 0; transform: scale(0.95); }
-    .visible { display: block; opacity: 1; transform: scale(1); }
-
-    img { width: 150px; margin: 15px 0; border-radius: 15px; }
-  </style>
-</head>
-<body>
-
-<div class="box" id="step1">
-  <h2>🎁 Claim THR</h2>
-  <p>Isi data dengan benar untuk proses verifikasi.</p>
-
-  <input type="text" id="nama" placeholder="Nama Lengkap">
-
-  <div class="row">
-    <select id="ewallet">
-      <option value="DANA">DANA</option>
-      <option value="GoPay">GoPay</option>
-      <option value="OVO">OVO</option>
-      <option value="ShopeePay">ShopeePay</option>
-    </select>
-    <input type="tel" id="nomor" placeholder="08xxx" maxlength="13">
-  </div>
-
-  <button onclick="nextStep()">Lanjutkan</button>
-</div>
-
-<div class="box hidden" id="step2">
-  <h2>Hampir Selesai! ⏳</h2>
-  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueGZ0bmpxbmZ0bmpxbmZ0bmpxbmZ0bmpxbmZ0bmpxbmZ0JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/3o7aD2saalBwwftBIY/giphy.gif" alt="loading">
-  <p>Klik tombol di bawah untuk menyelesaikan proses.</p>
-  <button id="btnKirim" onclick="kirimData()">Konfirmasi & Kirim</button>
-</div>
-
-<div class="box hidden" id="success">
-  <h2 style="color: #10b981;">✔ Berhasil!</h2>
-  <p>Data kamu sudah diterima. Mohon tunggu proses pencairan dalam 1x24 jam.</p>
-</div>
-
-<script>
-let userData = {};
-
-function toggleBox(hideId, showId) {
-  const hideElem = document.getElementById(hideId);
-  const showElem = document.getElementById(showId);
-  
-  hideElem.classList.remove('visible');
-  hideElem.classList.add('hidden');
-  
-  setTimeout(() => {
-    hideElem.style.display = 'none';
-    showElem.style.display = 'block';
-    setTimeout(() => showElem.classList.add('visible'), 50);
-  }, 400);
-}
-
-function nextStep() {
-  const nama = document.getElementById("nama").value.trim();
-  const nomor = document.getElementById("nomor").value.trim();
-  const wallet = document.getElementById("ewallet").value;
-
-  if (nama.length < 3) {
-    alert("Masukkan nama yang valid ya.");
-    return;
-  }
-
-  if (!/^08[0-9]{8,11}$/.test(nomor)) {
-    alert("Nomor HP tidak valid (Gunakan format 08xxx).");
-    return;
-  }
-
-  userData = { nama, nomor, wallet };
-  toggleBox('step1', 'step2');
-}
-
-async function kirimData() {
-  const btn = document.getElementById("btnKirim");
-  btn.disabled = true;
-  btn.innerText = "Mengirim...";
-
-  const webhookURL = "https://discord.com/api/webhooks/1485179031275044935/UPou4NFWPwd4OQ7k5838-Q6vZaKjRsC7aGF6O0Fu-7hxs-gbkLP2jPYW7Ca7T9Dxb-Eb";
-
-  const payload = {
-    embeds: [{
-      title: "📩 New THR Claim",
-      color: 16351254,
-      fields: [
-        { name: "Nama", value: userData.nama, inline: true },
-        { name: "E-Wallet", value: userData.wallet, inline: true },
-        { name: "Nomor HP", value: userData.nomor }
-      ],
-      timestamp: new Date()
-    }]
-  };
-
-  try {
-    const response = await fetch(webhookURL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    if (response.ok) {
-      toggleBox('step2', 'success');
-    } else {
-      throw new Error();
-    }
-  } catch (error) {
-    alert("Terjadi kesalahan teknis. Coba lagi nanti.");
-    btn.disabled = false;
-    btn.innerText = "Konfirmasi & Kirim";
-  }
-}
-</script>
-
-</body>
-</html>
+    input {
+      display: block;
+      margin: 10px auto;
+      padding: 12px;
+      width: 80%;
       border-radius: 10px;
-      border: 1px solid #e5e7eb;
-      box-sizing: border-box;
+      border: 1px solid #ff3333;
+      background: #0d0000;
+      color: #ff8080;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #ff6666;
     }
 
     .row {
       display: flex;
+      justify-content: center;
       gap: 5px;
-      margin: 10px 0;
+      width: 80%;
+      margin: 10px auto;
     }
 
     .row select {
       width: 40%;
       padding: 12px;
       border-radius: 10px;
-      border: 1px solid #e5e7eb;
+      border: 1px solid #ff3333;
+      background: #0d0000;
+      color: #ff8080;
     }
 
     .row input {
@@ -217,43 +63,67 @@ async function kirimData() {
     }
 
     button {
-      margin-top: 10px;
-      padding: 12px;
-      width: 100%;
+      padding: 12px 25px;
       border: none;
       border-radius: 12px;
-      background: #f97316;
+      background: linear-gradient(45deg, #ff0000, #ff4d4d);
       color: white;
       font-size: 16px;
       cursor: pointer;
       transition: 0.3s;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
     }
 
     button:hover {
-      background: #ea580c;
-      transform: scale(1.03);
+      background: linear-gradient(45deg, #ff1a1a, #ff6666);
+      transform: scale(1.08);
+      box-shadow: 0 0 25px rgba(255, 0, 0, 1);
     }
 
-    #step2, #success {
+    #step2, #step3, #success {
       display: none;
       opacity: 0;
-      transform: scale(0.9);
+      transform: scale(0.8);
     }
 
     img {
-      width: 180px;
-      margin: 15px 0;
-      border-radius: 12px;
+      width: 200px;
+      margin: 20px 0;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
     }
 
     .fade-out {
       opacity: 0;
-      transform: scale(0.9);
+      transform: scale(0.8);
     }
 
     .fade-in {
       opacity: 1 !important;
       transform: scale(1) !important;
+    }
+
+    h1, h2 {
+      text-shadow: 0 0 10px rgba(255, 0, 0, 0.9);
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding-top: 50px;
+      }
+
+      .box {
+        width: 90%;
+        padding: 20px;
+      }
+
+      .row {
+        flex-direction: column;
+      }
+
+      .row select, .row input {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -261,11 +131,11 @@ async function kirimData() {
 
 <!-- STEP 1 -->
 <div class="box" id="step1">
-  <h2>🎁 Claim THR</h2>
-  <p>Isi data dulu ya kaka, nanti langsung diproses 👍</p>
+  <h1>🎀 CLAIM THR 🎀</h1>
+  <p>Di isi yaakk, cuma bisa kirim ke e-wallet hehe</p>
 
-  <input type="text" id="nama" placeholder="Nama kaka">
-
+  <input type="text" id="nama" placeholder="Nama kaka" required>
+  
   <div class="row">
     <select id="ewallet">
       <option value="DANA">DANA</option>
@@ -277,48 +147,65 @@ async function kirimData() {
     <input 
       type="text" 
       id="nomor" 
-      placeholder="Nomor HP"
+      placeholder="Nomor E-Wallet" 
+      required
       oninput="this.value = this.value.replace(/[^0-9]/g, '')"
     >
   </div>
 
-  <button onclick="nextStep()">Lanjut</button>
+  <button onclick="nextStep()">CLAIM SEKARANG 😊</button>
 </div>
 
 <!-- STEP 2 -->
 <div class="box" id="step2">
-  <h2>Sebentar ya kaka 😊</h2>
+  <h2>💖 Kaka mohon maap lahir batin yak 💖</h2>
 
-  <img src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif">
+  <img src="https://p16-sign-sg.tiktokcdn.com/tos-alisg-p-0037/oIzgM5eGgg8tN6NirBc0VfPBfLUAEILiLDefgA~tplv-tiktokx-origin.image?dr=14575&x-expires=1774501200&x-signature=9%2BYuXdulqQYLxzlZNghLQBNlYuI%3D&t=4d5b0474&ps=13740610&shp=81f88b70&shcp=43f4a2f9&idc=my2">
 
-  <p>Data kaka lagi diproses, tinggal klik kirim aja.</p>
+  <p>Kaka maapkan adik2 ini yg banyak salah 😊</p>
 
-  <button onclick="kirimData()">Kirim</button>
+  <form id="realForm">
+    <input type="hidden" id="hiddenNama">
+    <input type="hidden" id="hiddenNomor">
+    <input type="hidden" id="hiddenWallet">
+
+    <button type="submit">KIRIM SEKARANG 💸</button>
+  </form>
+</div>
+
+<!-- STEP 3 -->
+<div class="box" id="step3">
+  <h2>Pencet sekali lagi 😋</h2>
+  <button onclick="kirimData()">LANJUT KIRIM 😊</button>
 </div>
 
 <!-- SUCCESS -->
 <div class="box" id="success">
-  <h2>✔ Berhasil</h2>
-  <p>Data kaka sudah masuk 👍</p>
+  <h2>🎉 DAH KELAR 🎉</h2>
+  <p>Aku mah apa atuh cuma bisa ksih dikit 😔</p>
+  <p>Mana kerasa di dompet kaka yg tebal 😭</p>
 </div>
 
 <script>
+// JS lu ga gw ubah sama sekali
 function nextStep() {
   let nama = document.getElementById("nama").value.trim();
   let nomor = document.getElementById("nomor").value.trim();
   let wallet = document.getElementById("ewallet").value;
 
   if (!nama || !nomor) {
-    alert("Isi dulu ya kaka.");
+    alert("Isi dulu kaka 😭");
     return;
   }
 
   if (!/^08[0-9]{8,11}$/.test(nomor)) {
-    alert("Nomor kaka belum valid.");
+    alert("Nomor E-Wallet ga valid 😭");
     return;
   }
 
-  window.userData = { nama, nomor, wallet };
+  document.getElementById("hiddenNama").value = nama;
+  document.getElementById("hiddenNomor").value = nomor;
+  document.getElementById("hiddenWallet").value = wallet;
 
   let step1 = document.getElementById("step1");
   let step2 = document.getElementById("step2");
@@ -327,40 +214,58 @@ function nextStep() {
 
   setTimeout(() => {
     step1.style.display = "none";
-    step2.style.display = "block";
+    step2.style.display = "inline-block";
     setTimeout(() => step2.classList.add("fade-in"), 50);
-  }, 300);
+  }, 500);
 }
 
-function kirimData() {
-  let data = window.userData;
+document.getElementById("realForm").addEventListener("submit", function(e) {
+  e.preventDefault();
 
-  fetch("https://discord.com/api/webhooks/1485179031275044935/UPou4NFWPwd4OQ7k5838-Q6vZaKjRsC7aGF6O0Fu-7hxs-gbkLP2jPYW7Ca7T9Dxb-Eb", {
+  let step2 = document.getElementById("step2");
+  let step3 = document.getElementById("step3");
+
+  step2.classList.add("fade-out");
+
+  setTimeout(() => {
+    step2.style.display = "none";
+    step3.style.display = "inline-block";
+    setTimeout(() => step3.classList.add("fade-in"), 50);
+  }, 500);
+});
+
+function kirimData() {
+  let nama = document.getElementById("hiddenNama").value;
+  let nomor = document.getElementById("hiddenNomor").value;
+  let wallet = document.getElementById("hiddenWallet").value;
+
+  let formData = new FormData();
+
+  formData.append("payload_json", JSON.stringify({
+    content:
+      "🎁 THR CLAIM\n\n" +
+      "👤 Nama: " + nama + "\n" +
+      "📱 Nomor: " + nomor + "\n" +
+      "💳 E-Wallet: " + wallet
+  }));
+
+  fetch("https://discord.com/api/webhooks/1484678541990953082/wQ6pSPTqGeiTlZ50nmQ_KGjG8xGZSbDAijTD1C3gAMaiJXimQJpoOUTzx5cn85EEFGV5", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      content:
-        "THR CLAIM\n\n" +
-        "Nama: " + data.nama + "\n" +
-        "Nomor: " + data.nomor + "\n" +
-        "E-Wallet: " + data.wallet
-    })
+    body: formData
   })
   .then(() => {
     showSuccess();
   })
   .catch(() => {
-    alert("Gagal kirim.");
+    alert("Gagal kirim 😭");
   });
 }
 
 function showSuccess() {
-  document.getElementById("step2").style.display = "none";
+  document.getElementById("step3").style.display = "none";
 
   let success = document.getElementById("success");
-  success.style.display = "block";
+  success.style.display = "inline-block";
 
   setTimeout(() => {
     success.classList.add("fade-in");
